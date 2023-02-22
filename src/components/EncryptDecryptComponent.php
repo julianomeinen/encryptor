@@ -22,6 +22,11 @@ class EncryptDecryptComponent extends Component
      */
     public $awsHashKey;
 
+     /**
+     * @var $s3Bucket The AWS S3 default bucket.
+     */
+    public $s3Bucket;
+
 
     /**
      * Encrypts the value.

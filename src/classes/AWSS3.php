@@ -15,11 +15,6 @@ class AWSS3
 {
 
     /**
-     * S3 default bucket.
-     */
-    const DEFAULT_BUCKET = 's3-tnm-bucket';
-
-    /**
      * @var $bucket S3 bucket.
      */
     public string $bucket;
@@ -34,7 +29,7 @@ class AWSS3
      */
     public function __construct(string $bucket = null)
     {
-        $this->bucket = ($bucket ?? self::DEFAULT_BUCKET);
+        $this->bucket = ($bucket ?? \Yii::$app->components['encryptor']['s3Bucket']);
 
     }
 
