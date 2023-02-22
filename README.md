@@ -66,7 +66,7 @@ It can be used with AWS PHP-SDK to retrieve the secret key with AWS KMS using a 
     ...
     'encryptor' => [
         'class' => 'Juliano\Yii2EncryptorBehavior\components\EncryptDecryptComponent',
-            'key' => AWSEncryptDecrypt::class,
+            'key' => \Juliano\Yii2EncryptorBehavior\classes\AWSEncryptDecrypt::class,
             'awsHashKey' => getenv('AWS_HASH_KEY'),
     ],
 ],
