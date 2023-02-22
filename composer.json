@@ -1,0 +1,32 @@
+{
+    "name": "juliano/yii2encryptorbehavior",
+    "description": "Encrypts and decrypts the attributes when saving/updating an ActiveRecord.",
+    "type": "yii2-extension",
+    "require": {
+        "php": "^7.2 || ^8.0",
+        "yiisoft/yii2": "3.0.x-dev",
+        "aws/aws-sdk-php": "^3.260",
+        "guzzlehttp/guzzle": "7.5.x-dev"
+    },
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Juliano\\Yii2EncryptorBehavior\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Juliano Kloos",
+            "email": "julianomeinen.souza@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.1@dev"
+    }
+}
