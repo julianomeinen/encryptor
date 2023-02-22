@@ -2,7 +2,7 @@
 
 namespace Juliano\Yii2EncryptorBehavior\behaviors;
 
-use components\EncryptDecryptComponent;
+use Juliano\Yii2EncryptorBehavior\components\EncryptDecryptComponent;
 use yii\base\Behavior;
 use yii\base\Event;
 use yii\base\InvalidConfigException;
