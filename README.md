@@ -16,7 +16,7 @@ Ensure the following params are present in the app's params config:
 
 ## Additional Options
 
-It can be used with AWS PHP-SDK to retrieve the secret key with AWS KMS using a cryptographic hash:
+It can be used with AWS PHP-SDK to retrieve the secret key with AWS KMS using a cryptographic hash. Environment variables can be used to increase security and avoid hard-coded secrets.
 
 ```
 'components' => [
