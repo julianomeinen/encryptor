@@ -67,7 +67,8 @@ It can be used with AWS PHP-SDK to retrieve the secret key with AWS KMS using a 
     'encryptor' => [
         'class' => 'Juliano\Yii2EncryptorBehavior\components\EncryptDecryptComponent',
             'key' => \Juliano\Yii2EncryptorBehavior\classes\AWSEncryptDecrypt::class,
-            'awsHashKey' => getenv('AWS_HASH_KEY'),
+            'awsHashKey' => getenv('AWS_HASH_KEY'), // Get the secret hash to be decrypted with ASW's decryption method.
+            's3Bucket' => 's3-tnm-bucket', // Set the default S3 bucket
     ],
 ],
 ```
