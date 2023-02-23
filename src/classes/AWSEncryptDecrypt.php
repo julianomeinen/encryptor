@@ -3,6 +3,7 @@
 namespace Juliano\Yii2EncryptorBehavior\classes;
 
 use Aws\Kms\KmsClient;
+use Aws\Credentials\CredentialProvider;
 use Exception;
 
 /**
@@ -20,7 +21,7 @@ class AWSEncryptDecrypt
      *
      * @return string Encrypted data.
      */
-    public function encrypt(mixed $data, mixed $KeyId = null): string
+    public function encrypt($data, $KeyId = null): string
     {
         $keyData = $this->getKmsClient()->describeKey(
             ['KeyId' => $KeyId]
@@ -47,14 +48,14 @@ class AWSEncryptDecrypt
      *
      * @throws Exception
      */
-    public function decrypt($data): false|string
+    public function decrypt($data)
     {
         $result = $this->getKmsClient()->decrypt(
             ['CiphertextBlob' => $data]
         );
 
         if ($result instanceof \Aws\Result === false) {
-            throw new Exception('Invalid AWS Decrypt Key.');
+            return new Exception('Invalid AWS Decrypt Key.');
         }
 
         return $result['Plaintext'];
@@ -70,7 +71,7 @@ class AWSEncryptDecrypt
      *
      * @return mixed
      */
-    public static function getKey(mixed $hash, $base64Decode = true): mixed
+    public static function getKey($hash, $base64Decode = true)
     {
         return (new AWSEncryptDecrypt)->decrypt($base64Decode === true ? base64_decode($hash) : $hash);
 
@@ -84,12 +85,13 @@ class AWSEncryptDecrypt
      */
     private function getKmsClient(): KmsClient
     {
+        $provider = CredentialProvider::defaultProvider();
+        
         return new KmsClient(
             [
-                'profile'     => 'default',
                 'version'     => 'latest',
                 'region'      => 'ca-central-1',
-                'credentials' => false,
+                'credentials' => $provider
             ]
         );
 

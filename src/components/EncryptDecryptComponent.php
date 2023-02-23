@@ -36,7 +36,7 @@ class EncryptDecryptComponent extends Component
      *
      * @return string
      */
-    public static function encrypt(mixed $value, bool $base64Encode = true): string
+    public static function encrypt($value, bool $base64Encode = true): string
     {
         $encryptedData = (new EncryptDecrypt)->encrypt($value, self::getKey());
         return $base64Encode === true ? base64_encode($encryptedData) : $encryptedData;
@@ -52,7 +52,7 @@ class EncryptDecryptComponent extends Component
      *
      * @return mixed
      */
-    public static function decrypt(mixed $value, bool $base64Decode = true): mixed
+    public static function decrypt($value, bool $base64Decode = true)
     {
         return (new EncryptDecrypt)->decrypt(
             ($base64Decode === true ? base64_decode($value) : $value),
@@ -67,7 +67,7 @@ class EncryptDecryptComponent extends Component
      *
      * @return mixed
      */
-    public static function getKey(): mixed
+    public static function getKey()
     {
         $key = \Yii::$app->components['encryptor']['key'];
 

@@ -62,7 +62,7 @@ class EncryptDecrypt
      *
      * @throws Exception
      */
-    public function encrypt(mixed $data, mixed $secret): string
+    public function encrypt($data, $secret): string
     {
         if (extension_loaded('openssl') === false) {
             throw new Exception('Encryption requires the OpenSSL PHP extension');
@@ -102,7 +102,7 @@ class EncryptDecrypt
      *
      * @throws Exception
      */
-    public function decrypt($data, $secret): false|string
+    public function decrypt($data, $secret)
     {
         $info = '';
         if (extension_loaded('openssl') === false) {
@@ -164,7 +164,7 @@ class EncryptDecrypt
      *
      * @throws Exception
      */
-    public function generateRandomKey(int $length = 32): bool|string
+    public function generateRandomKey(int $length = 32)
     {
         if (is_int($length) === false) {
             throw new Exception('First parameter ($length) must be an integer');
@@ -229,7 +229,7 @@ class EncryptDecrypt
      *
      * @return false|integer
      */
-    public static function byteLength($string): false|int
+    public static function byteLength($string)
     {
         return mb_strlen((string) $string, '8bit');
 
@@ -247,7 +247,7 @@ class EncryptDecrypt
      *
      * @throws Exception
      */
-    public function validateData($data, $key, bool $rawHash = false): false|string
+    public function validateData($data, $key, bool $rawHash = false)
     {
         $test = @hash_hmac($this->macHash, '', '', $rawHash);
         if ($test === false) {

@@ -3,6 +3,7 @@
 namespace Juliano\Yii2EncryptorBehavior\classes;
 
 use Aws\S3\S3Client;
+use Aws\Credentials\CredentialProvider;
 use Juliano\Yii2encryptorbehavior\components\EncryptDecryptComponent;
 use Exception;
 use Iterator;
@@ -120,7 +121,7 @@ class AWSS3
         $bucket = ($bucket ?? $this->bucket);
         $file = $this->getFile($key, $bucket);
         if ($file instanceof \Aws\Result === false) {
-            return throw new Exception("Unable to find the file $key in the AWS S3 bucket $bucket.");
+            return new Exception("Unable to find the file $key in the AWS S3 bucket $bucket.");
         }
 
         $decryptedData = (new EncryptDecryptComponent)->decrypt($file['Body'], false);
@@ -174,14 +175,14 @@ class AWSS3
      * @throws Exception Unable to read the file.
      * @return false|\Aws\Result Return file data from AWS.
      */
-    public function upload(string $key, mixed $data, string $bucket = null): false|\Aws\Result
+    public function upload(string $key, $data, string $bucket = null)
     {
-        if (is_file($data) === true) {
+        if ( file_exists($data) === true && is_file($data) === true) {
             $fileBytes = file_get_contents($data);
             if ($fileBytes !== false) {
                 $data = $fileBytes;
             } else {
-                return throw new Exception('Unable to read the file '.$data);
+                return new Exception('Unable to read the file '.$data);
             }
         }
 
@@ -206,14 +207,14 @@ class AWSS3
      * @throws Exception Unable to read the file.
      * @return false|\Aws\Result Return file data from AWS.
      */
-    public function uploadEncrypted(string $key, mixed $data, string $bucket = null): false|\Aws\Result
+    public function uploadEncrypted(string $key, $data, string $bucket = null)
     {
-        if (is_file($data) === true) {
+        if ( file_exists($data) === true && is_file($data) === true) {
             $fileBytes = file_get_contents($data);
             if ($fileBytes !== false) {
                 $data = $fileBytes;
             } else {
-                return throw new Exception('Unable to read the file '.$data);
+                return new Exception('Unable to read the file '.$data);
             }
         }
 
@@ -229,12 +230,13 @@ class AWSS3
      */
     private function getS3Client(): S3Client
     {
+        $provider = CredentialProvider::defaultProvider();
+
         return new S3Client(
             [
-                'profile'     => 'default',
                 'version'     => 'latest',
                 'region'      => 'ca-central-1',
-                'credentials' => false,
+                'credentials' => $provider,
             ]
         );
 
