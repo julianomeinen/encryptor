@@ -120,3 +120,7 @@ $s3->getDecryptedFile($s3FileID);
 ### Extra Info
 
 You can use the ```download(string $key, string $destinationDirectory, string $bucket = null)``` and ```upload(string $key, mixed $data, string $bucket = null)``` methods to download and upload without encrypting and decrypting the data.
+
+## How to run the tests
+
+You can run the test with the ```./vendor/bin/phpunit ./src/tests/example.php``` command.

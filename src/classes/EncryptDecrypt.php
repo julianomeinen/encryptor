@@ -64,28 +64,20 @@ class EncryptDecrypt
      */
     public function encrypt($data, $secret): string
     {
-        if (extension_loaded('openssl') === false) {
-            throw new Exception('Encryption requires the OpenSSL PHP extension');
-        }
-
-        if (isset($this->allowedCiphers[$this->cipher][0], $this->allowedCiphers[$this->cipher][1]) === false) {
-            throw new Exception($this->cipher.' is not an allowed cipher');
-        }
-
-        list($blockSize, $keySize) = $this->allowedCiphers[$this->cipher];
+        $blockSize = $keySize = 16;
 
         $keySalt = $this->generateRandomKey($keySize);
-        $key = $this->hkdf($this->kdfHash, $secret, $keySalt, '', $keySize);
+
+        $key = $this->hkdf($this->kdfHash, $secret, $keySalt, $this->authKeyInfo, $keySize);
 
         $iv = $this->generateRandomKey($blockSize);
-
         $encrypted = openssl_encrypt($data, $this->cipher, $key, OPENSSL_RAW_DATA, $iv);
+
         if ($encrypted === false) {
             throw new Exception('OpenSSL failure on encryption: '.openssl_error_string());
         }
 
-        $authKey = $this->hkdf($this->kdfHash, $key, null, $this->authKeyInfo, $keySize);
-        $hashed = $this->hashData($iv.$encrypted, $authKey);
+        $hashed = $this->hashData($iv.$encrypted, $key);
 
         return $keySalt.$hashed;
 
@@ -104,27 +96,19 @@ class EncryptDecrypt
      */
     public function decrypt($data, $secret)
     {
-        $info = '';
-        if (extension_loaded('openssl') === false) {
-            throw new Exception('Encryption requires the OpenSSL PHP extension');
-        }
-
-        if (isset($this->allowedCiphers[$this->cipher][0], $this->allowedCiphers[$this->cipher][1]) === false) {
-            throw new Exception($this->cipher.' is not an allowed cipher');
-        }
-
-        list($blockSize, $keySize) = $this->allowedCiphers[$this->cipher];
+        $blockSize = $keySize = 16;
 
         $keySalt = static::byteSubstr($data, 0, $keySize);
-        $key = $this->hkdf($this->kdfHash, $secret, $keySalt, $info, $keySize);
 
-        $authKey = $this->hkdf($this->kdfHash, $key, null, $this->authKeyInfo, $keySize);
-        $data = $this->validateData(static::byteSubstr($data, $keySize, null), $authKey);
+        $key = $this->hkdf($this->kdfHash, $secret, $keySalt, $this->authKeyInfo, $keySize);
+
+        $data = $this->validateData(static::byteSubstr($data, $keySize, null), $key);
         if ($data === false) {
             return false;
         }
 
         $iv = static::byteSubstr($data, 0, $blockSize);
+
         $encrypted = static::byteSubstr($data, $blockSize, null);
 
         $decrypted = openssl_decrypt($encrypted, $this->cipher, $key, OPENSSL_RAW_DATA, $iv);
@@ -174,7 +158,7 @@ class EncryptDecrypt
             throw new Exception('First parameter ($length) must be greater than 0');
         }
 
-        return random_bytes($length);
+        return static::byteSubstr(base64_encode(random_bytes($length)), 0, 16);
 
     }
 
@@ -217,7 +201,7 @@ class EncryptDecrypt
             $length = static::byteLength($string);
         }
 
-        return mb_substr($string, $start, $length, '8bit');
+        return mb_substr($string, $start, $length);
 
     }
 
@@ -231,7 +215,7 @@ class EncryptDecrypt
      */
     public static function byteLength($string)
     {
-        return mb_strlen((string) $string, '8bit');
+        return mb_strlen((string) $string);
 
     }
 
@@ -249,7 +233,7 @@ class EncryptDecrypt
      */
     public function validateData($data, $key, bool $rawHash = false)
     {
-        $test = @hash_hmac($this->macHash, '', '', $rawHash);
+        $test = @hash_hmac($this->macHash, $data, $key, $rawHash);
         if ($test === false) {
             throw new Exception('Failed to generate HMAC with hash algorithm: '.$this->macHash);
         }
@@ -258,7 +242,6 @@ class EncryptDecrypt
         if (static::byteLength($data) >= $hashLength) {
             $hash = static::byteSubstr($data, 0, $hashLength);
             $pureData = static::byteSubstr($data, $hashLength, null);
-
             $calculatedHash = hash_hmac($this->macHash, $pureData, $key, $rawHash);
 
             if ($this->compareString($hash, $calculatedHash) === true) {
