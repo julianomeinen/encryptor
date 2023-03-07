@@ -1,8 +1,8 @@
 <?php
 
-namespace Juliano\Yii2EncryptorBehavior\behaviors;
+namespace tnm\soteria\behaviors;
 
-use Juliano\Yii2EncryptorBehavior\components\EncryptDecryptComponent;
+use tnm\soteria\components\EncryptDecryptComponent;
 use yii\base\Behavior;
 use yii\base\Event;
 use yii\base\InvalidConfigException;

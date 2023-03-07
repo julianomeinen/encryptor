@@ -1,6 +1,6 @@
 <?php
 
-namespace Juliano\Yii2EncryptorBehavior\classes;
+namespace tnm\soteria\classes;
 
 use Exception;
 

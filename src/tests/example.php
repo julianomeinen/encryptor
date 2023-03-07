@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Juliano\Yii2EncryptorBehavior\classes\EncryptDecrypt;
+use tnm\soteria\classes\EncryptDecrypt;
 
 final class Example extends TestCase
 {

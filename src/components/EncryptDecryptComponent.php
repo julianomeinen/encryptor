@@ -1,9 +1,9 @@
 <?php
 
-namespace  Juliano\Yii2EncryptorBehavior\components;
+namespace  tnm\soteria\components;
 
-use Juliano\Yii2EncryptorBehavior\classes\AWSEncryptDecrypt;
-use Juliano\Yii2EncryptorBehavior\classes\EncryptDecrypt;
+use tnm\soteria\classes\AWSEncryptDecrypt;
+use tnm\soteria\classes\EncryptDecrypt;
 use yii\base\Component;
 
 /**

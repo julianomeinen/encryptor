@@ -1,5 +1,5 @@
 {
-    "name": "juliano/yii2encryptorbehavior",
+    "name": "tnm/soteria",
     "description": "Encrypts and decrypts the attributes when saving/updating an ActiveRecord.",
     "type": "yii2-extension",
     "require": {
@@ -11,7 +11,7 @@
     "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {
-            "Juliano\\Yii2EncryptorBehavior\\": "src/"
+            "tnm\\soteria\\": "src/"
         }
     },
     "authors": [

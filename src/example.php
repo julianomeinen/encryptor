@@ -2,8 +2,8 @@
 
 require_once '../vendor/autoload.php';
 
-use Juliano\Yii2EncryptorBehavior\classes\EncryptDecrypt;
-use Juliano\Yii2EncryptorBehavior\classes\AWSS3;
+use tnm\soteria\classes\EncryptDecrypt;
+use tnm\soteria\classes\AWSS3;
 
 $key = 'key';
 $text = 'text';

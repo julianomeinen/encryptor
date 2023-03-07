@@ -1,10 +1,10 @@
 <?php
 
-namespace Juliano\Yii2EncryptorBehavior\classes;
+namespace tnm\soteria\classes;
 
 use Aws\S3\S3Client;
 use Aws\Credentials\CredentialProvider;
-use Juliano\Yii2encryptorbehavior\components\EncryptDecryptComponent;
+use tnm\soteria\components\EncryptDecryptComponent;
 use Exception;
 use Iterator;
 use GuzzleHttp\Psr7;
